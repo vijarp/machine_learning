@@ -6,6 +6,8 @@ from sklearn.preprocessing import LabelEncoder,OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import train_test_split
 companies = pd.read_csv("1000_Companies.csv")
+
+first_row = list(companies.columns)
 X = companies.iloc[:,:-1].values
 y = companies.iloc[:,4].values
 print(companies.head())
@@ -40,3 +42,35 @@ print(regressor.intercept_)
 from sklearn.metrics import r2_score
 
 print(r2_score(y_test,y_pred))
+
+
+print("*"*25 + "Ridge"+"*"*25)
+from sklearn.linear_model import Ridge
+
+alphas = [0.1,1,10,100,1000,1000]
+ridge_scores = []
+for alpha in alphas:
+    #Create a Ridge
+    ridge = Ridge(alpha = alpha)
+    ridge.fit(X_train,y_train)
+    score = ridge.score(X_test,y_test)
+    ridge_scores.append(score)
+
+print(ridge_scores)
+
+
+print("*"*25 + " Lasso " + "*"*25)
+
+from sklearn.linear_model import Lasso
+
+lasso = Lasso(alpha = 0.3)
+
+lasso.fit(X,y)
+lasso_coef = lasso.coef_
+print(lasso_coef)
+print(first_row)
+plt.bar(first_row,lasso_coef)
+plt.xticks(rotation = 45)
+plt.show()
+
+from sklearn.model_selection import Rand
